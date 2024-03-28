@@ -161,6 +161,8 @@ const Completion = ({ messages, onSubmit }: Props) => {
               return (
                 <ChatContent
                   key={index}
+                  isLoading={isLoading}
+                  isShowCursor={showMessages.length - 1 === index}
                   content={content}
                   isChartChat={isChartChat}
                   onLinkClick={() => {

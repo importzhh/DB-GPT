@@ -15,6 +15,7 @@ import VisDashboard from './vis-dashboard';
 import VisPlugin from './vis-plugin';
 import VisCode from './vis-code';
 import { formatSql } from '@/utils';
+import Cursor from './cursor';
 
 type MarkdownComponent = Parameters<typeof ReactMarkdown>['0']['components'];
 
@@ -321,6 +322,9 @@ const extraComponents: MarkdownComponent = {
         <div>{children}</div>
       </div>
     );
+  },
+  cursor: function () {
+    return <Cursor />;
   },
 };
 

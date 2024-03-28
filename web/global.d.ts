@@ -10,5 +10,6 @@ declare namespace JSX {
       HTMLElement
     >;
     'chart-view': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
+    cursor: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
   }
 }

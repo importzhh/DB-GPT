@@ -20,6 +20,8 @@ interface Props {
   };
   isChartChat?: boolean;
   onLinkClick?: () => void;
+  isLoading?: boolean;
+  isShowCursor?: boolean;
 }
 
 type MarkdownComponent = Parameters<typeof ReactMarkdown>['0']['components'];
@@ -50,14 +52,21 @@ const pluginViewStatusMapper: Record<DBGPTView['status'], { bgClass: string; ico
   },
 };
 
-function formatMarkdownVal(val: string) {
-  return val
+function formatMarkdownVal(val: string, isShowCursor: boolean = false, isLoading: boolean = false) {
+  console.log(isShowCursor, isLoading);
+  const curVal = val
     .replaceAll('\\n', '\n')
     .replace(/<table(\w*=[^>]+)>/gi, '<table $1>')
     .replace(/<tr(\w*=[^>]+)>/gi, '<tr $1>');
+
+  if (isShowCursor && isLoading) {
+    return curVal + '<cursor></cursor>';
+  } else {
+    return curVal;
+  }
 }
 
-function ChatContent({ children, content, isChartChat, onLinkClick }: PropsWithChildren<Props>) {
+function ChatContent({ children, content, isChartChat, onLinkClick, isLoading, isShowCursor }: PropsWithChildren<Props>) {
   const { scene } = useContext(ChatContext);
 
   const { context, model_name, role } = content;
@@ -159,9 +168,11 @@ function ChatContent({ children, content, isChartChat, onLinkClick }: PropsWithC
         )}
         {/* Markdown */}
         {isRobot && typeof context === 'string' && (
-          <ReactMarkdown components={{ ...markdownComponents, ...extraMarkdownComponents }} rehypePlugins={[rehypeRaw]}>
-            {formatMarkdownVal(value)}
-          </ReactMarkdown>
+          <>
+            <ReactMarkdown components={{ ...markdownComponents, ...extraMarkdownComponents }} rehypePlugins={[rehypeRaw]}>
+              {formatMarkdownVal(value, isShowCursor, isLoading)}
+            </ReactMarkdown>
+          </>
         )}
         {!!relations?.length && (
           <div className="flex flex-wrap mt-2">
